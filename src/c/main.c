@@ -208,8 +208,8 @@ static void prv_window_load(Window* window)
   layer_add_child(window_layer, text_layer_get_layer(s_weather_layer));
 
   // Read persisted colors
-  s_fg_color = GColorFromHEX(persist_exists(PERSIST_KEY_FG) ? persist_read_int(PERSIST_KEY_FG) : 0xFFFFFF);
-  s_bg_color = GColorFromHEX(persist_exists(PERSIST_KEY_BG) ? persist_read_int(PERSIST_KEY_BG) : 0x000000);
+s_fg_color = GColorFromHEX(persist_exists(PERSIST_KEY_FG) ? persist_read_int(PERSIST_KEY_FG) : 0xFF0000);
+s_bg_color = GColorFromHEX(persist_exists(PERSIST_KEY_BG) ? persist_read_int(PERSIST_KEY_BG) : 0xFFFFFF);
 
   prv_apply_colors();
 

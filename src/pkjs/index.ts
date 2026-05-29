@@ -10,6 +10,13 @@ Pebble.addEventListener("appmessage", function (_e) {
 });
 
 Pebble.addEventListener("showConfiguration", function () {
+    var savedFg = localStorage.getItem('fg') || '0xFF0000';
+    var savedBg = localStorage.getItem('bg') || '0xFFFFFF';
+
+    function opt(val, label, cur) {
+        return "<option value='" + val + "'" + (val === cur ? " selected" : "") + ">" + label + "</option>";
+    }
+
     var html =
         '<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Parabola Config</title><style>' +
         "body{font-family:-apple-system,sans-serif;background:#222;color:#fff;padding:20px;margin:0}" +
@@ -19,29 +26,29 @@ Pebble.addEventListener("showConfiguration", function () {
         "button{width:100%;padding:14px;margin-top:24px;font-size:17px;font-weight:600;background:#007aff;color:#fff;border:none;border-radius:10px}" +
         "</style></head><body>" +
         "<h1>Parabola</h1>" +
-        "<label>Foreground Color</label><select id='fg'>" +
-        "<option value='0xFFFFFF'>White</option>" +
-        "<option value='0x000000'>Black</option>" +
-        "<option value='0xFF0000'>Red</option>" +
-        "<option value='0x0000FF'>Blue</option>" +
-        "<option value='0x00FF00'>Green</option>" +
-        "<option value='0xFFFF00'>Yellow</option>" +
-        "<option value='0xFF8800'>Orange</option>" +
-        "<option value='0x8800FF'>Purple</option>" +
-        "<option value='0x00FFFF'>Cyan</option>" +
-        "<option value='0xFF00FF'>Magenta</option>" +
+        "<label>Parabola Color</label><select id='fg'>" +
+        opt('0xFFFFFF', 'White', savedFg) +
+        opt('0x000000', 'Black', savedFg) +
+        opt('0xFF0000', 'Red', savedFg) +
+        opt('0x0000FF', 'Blue', savedFg) +
+        opt('0x00FF00', 'Green', savedFg) +
+        opt('0xFFFF00', 'Yellow', savedFg) +
+        opt('0xFF8800', 'Orange', savedFg) +
+        opt('0x8800FF', 'Purple', savedFg) +
+        opt('0x00FFFF', 'Cyan', savedFg) +
+        opt('0xFF00FF', 'Magenta', savedFg) +
         "</select>" +
-        "<label>Background Color</label><select id='bg'>" +
-        "<option value='0x000000'>Black</option>" +
-        "<option value='0xFFFFFF'>White</option>" +
-        "<option value='0xFF0000'>Red</option>" +
-        "<option value='0x0000FF'>Blue</option>" +
-        "<option value='0x00FF00'>Green</option>" +
-        "<option value='0xFFFF00'>Yellow</option>" +
-        "<option value='0xFF8800'>Orange</option>" +
-        "<option value='0x8800FF'>Purple</option>" +
-        "<option value='0x00FFFF'>Cyan</option>" +
-        "<option value='0xFF00FF'>Magenta</option>" +
+        "<label>Text Color</label><select id='bg'>" +
+        opt('0x000000', 'Black', savedBg) +
+        opt('0xFFFFFF', 'White', savedBg) +
+        opt('0xFF0000', 'Red', savedBg) +
+        opt('0x0000FF', 'Blue', savedBg) +
+        opt('0x00FF00', 'Green', savedBg) +
+        opt('0xFFFF00', 'Yellow', savedBg) +
+        opt('0xFF8800', 'Orange', savedBg) +
+        opt('0x8800FF', 'Purple', savedBg) +
+        opt('0x00FFFF', 'Cyan', savedBg) +
+        opt('0xFF00FF', 'Magenta', savedBg) +
         "</select>" +
         "<button onclick='save()'>Save</button>" +
         "<script>function save(){var fg=document.getElementById('fg').value;var bg=document.getElementById('bg').value;document.location='pebblejs://close#'+encodeURIComponent(JSON.stringify({foreground_color:fg,background_color:bg}))}<" + "/script>" +
@@ -55,8 +62,14 @@ Pebble.addEventListener("webviewclosed", function (e) {
     if (!e || !e.response) return;
     try {
         var config = JSON.parse(decodeURIComponent(e.response));
-        if (config.foreground_color) config.foreground_color = parseInt(config.foreground_color);
-        if (config.background_color) config.background_color = parseInt(config.background_color);
+        if (config.foreground_color) {
+            localStorage.setItem('fg', config.foreground_color);
+            config.foreground_color = parseInt(config.foreground_color);
+        }
+        if (config.background_color) {
+            localStorage.setItem('bg', config.background_color);
+            config.background_color = parseInt(config.background_color);
+        }
         console.log("Config received:", JSON.stringify(config));
         Pebble.sendAppMessage(config);
     } catch (err) {
