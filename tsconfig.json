@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "ignoreDeprecations": "6.0",
+    "target": "ES5",
+    "module": "commonjs",
+    "strict": false,
+    "types": [
+      "pebblekitjs"
+    ]
+  },
+  "include": [
+    "src/pkjs/**/*.ts"
+  ]
+}
+ß

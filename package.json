@@ -1,0 +1,46 @@
+{
+  "name": "Parabola",
+  "author": "MakeAwesomeHappen",
+  "version": "1.0.0",
+  "keywords": [
+    "pebble-app"
+  ],
+  "private": true,
+  "scripts": {
+    "tsc": "tsc",
+    "build": "tsc && pebble build",
+    "start": "npx tsc && pebble build && pebble install --emulator emery",
+    "screenshot": "pebble screenshot screenshot.png",
+    "wipe": "pebble wipe"
+  },
+  "pebble": {
+    "displayName": "Parabola",
+    "uuid": "270688eb-68d3-4539-bbde-aa5cd6c108ec",
+    "sdkVersion": "3",
+    "enableMultiJS": true,
+    "targetPlatforms": [
+      "aplite",
+      "basalt",
+      "chalk",
+      "diorite",
+      "emery",
+      "flint",
+      "gabbro"
+    ],
+    "watchapp": {
+      "watchface": true
+    },
+    "messageKeys": [
+      "weather_temperature",
+      "weather_humidity",
+      "weather_wind_speed"
+    ],
+    "resources": {
+      "media": []
+    }
+  },
+  "devDependencies": {
+    "@types/pebblekitjs": "^4.0.33",
+    "typescript": "^6.0.3"
+  }
+}

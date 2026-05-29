@@ -1,7 +1,9 @@
 build/
 node_modules/
-src/pkjs/**/*.js
-
+src/pkjs/**/*.jsß
+.idea
+.vscode
+CMakeLists.txt
 .DS_Store
 screenshot.png
 .lock-waf_darwin_build
