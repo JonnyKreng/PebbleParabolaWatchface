@@ -35,11 +35,9 @@ static GColor s_bg_color;
 
 static void prv_apply_colors(void)
 {
-  window_set_background_color(s_window, s_bg_color);
-
-  text_layer_set_text_color(s_time_layer, s_fg_color);
-  text_layer_set_text_color(s_date_layer, s_fg_color);
-  text_layer_set_text_color(s_weather_layer, s_fg_color);
+  text_layer_set_text_color(s_time_layer, s_bg_color);
+  text_layer_set_text_color(s_date_layer, s_bg_color);
+  text_layer_set_text_color(s_weather_layer, s_bg_color);
 
   parabola_set_foreground_color(s_fg_color);
 
@@ -65,14 +63,14 @@ static void prv_update_time(struct tm* tick_time)
 static void prv_separator_layer_update_proc(Layer* layer, GContext* ctx)
 {
   GRect bounds = layer_get_bounds(layer);
-  graphics_context_set_stroke_color(ctx, s_fg_color);
+  graphics_context_set_stroke_color(ctx, s_bg_color);
   graphics_draw_line(ctx, GPoint(0, bounds.size.h / 2), GPoint(bounds.size.w, bounds.size.h / 2));
 }
 
 static void prv_battery_layer_update_proc(Layer* layer, GContext* ctx)
 {
-  graphics_context_set_stroke_color(ctx, s_fg_color);
-  graphics_context_set_fill_color(ctx, s_fg_color);
+  graphics_context_set_stroke_color(ctx, s_bg_color);
+  graphics_context_set_fill_color(ctx, s_bg_color);
 
   // Battery outline
   GRect bounds = layer_get_bounds(layer);

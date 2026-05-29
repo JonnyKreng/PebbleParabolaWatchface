@@ -55,6 +55,8 @@ Pebble.addEventListener("webviewclosed", function (e) {
     if (!e || !e.response) return;
     try {
         var config = JSON.parse(decodeURIComponent(e.response));
+        if (config.foreground_color) config.foreground_color = parseInt(config.foreground_color);
+        if (config.background_color) config.background_color = parseInt(config.background_color);
         console.log("Config received:", JSON.stringify(config));
         Pebble.sendAppMessage(config);
     } catch (err) {

@@ -2,6 +2,7 @@
 Pebble.addEventListener("ready", function (_e) {
     console.log("Weather widget initialized.");
     fetchWeather();
+    // Update weather every 15 minutes (900,000 milliseconds)
     setInterval(fetchWeather, 900000);
 });
 Pebble.addEventListener("appmessage", function (_e) {
@@ -51,6 +52,10 @@ Pebble.addEventListener("webviewclosed", function (e) {
         return;
     try {
         var config = JSON.parse(decodeURIComponent(e.response));
+        if (config.foreground_color)
+            config.foreground_color = parseInt(config.foreground_color);
+        if (config.background_color)
+            config.background_color = parseInt(config.background_color);
         console.log("Config received:", JSON.stringify(config));
         Pebble.sendAppMessage(config);
     }
@@ -63,7 +68,7 @@ function fetchWeather() {
         navigator.geolocation.getCurrentPosition(function (position) {
             var latitude = position.coords.latitude;
             var longitude = position.coords.longitude;
-            console.log("Got location: " + latitude + ", " + longitude);
+            console.log("Got location: ".concat(latitude, ", ").concat(longitude));
             fetchWeatherForLocation(latitude, longitude);
         }, function (error) {
             console.error("Error getting geolocation:", error.message);
@@ -76,7 +81,7 @@ function fetchWeather() {
     }
 }
 function fetchWeatherForLocation(latitude, longitude) {
-    var weatherUrl = "https://api.open-meteo.com/v1/forecast?latitude=" + latitude + "&longitude=" + longitude + "&current=temperature_2m&hourly=temperature_2m";
+    var weatherUrl = "https://api.open-meteo.com/v1/forecast?latitude=".concat(latitude, "&longitude=").concat(longitude, "&current=temperature_2m&hourly=temperature_2m");
     var xhr = new XMLHttpRequest();
     xhr.onload = function () {
         if (xhr.status === 200) {
@@ -89,7 +94,7 @@ function fetchWeatherForLocation(latitude, longitude) {
                     updateWidget("Weather data unavailable.");
                     return;
                 }
-                var currentTemp = Math.round(current.temperature_2m) + " \u00B0C";
+                var currentTemp = "".concat(Math.round(current.temperature_2m), " \u00B0C");
                 console.log("Current temperature:", currentTemp);
                 updateWidget(currentTemp);
             }
