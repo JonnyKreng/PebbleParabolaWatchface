@@ -1,6 +1,6 @@
 #include "parabola_draw.h"
 
-#define NUM_LINES 20
+#define NUM_LINES 15
 #define PARABOLA_LINE_WIDTH 1
 #define ANIMATION_DURATION_MS 2500
 

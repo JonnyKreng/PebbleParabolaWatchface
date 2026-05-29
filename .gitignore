@@ -1,9 +1,10 @@
 build/
 node_modules/
-src/pkjs/**/*.jsß
+src/pkjs/**/*.js
 .idea
 .vscode
 CMakeLists.txt
 .DS_Store
+
 .lock-waf_darwin_build
 cmake-build-debug/

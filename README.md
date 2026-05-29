@@ -1,6 +1,7 @@
 # Parabola
 
-A Pebble watchface featuring a clean digital clock, date, battery indicator, weather display, and animated parabolic decorative lines.
+A Pebble watchface featuring a clean digital clock, date, battery indicator, weather display, and animated parabolic
+decorative lines.
 
 ![Screenshot](screenshot.png)
 
@@ -15,7 +16,7 @@ A Pebble watchface featuring a clean digital clock, date, battery indicator, wea
 
 ## Platforms
 
-Supports aplite, basalt, chalk, diorite, emery, flint, and gabbro.
+Supports emery and gabbro.
 
 ## Build
 

@@ -1,7 +1,7 @@
 {
   "name": "Parabola",
   "author": "MakeAwesomeHappen",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "keywords": [
     "pebble-app"
   ],
@@ -9,7 +9,7 @@
   "scripts": {
     "tsc": "tsc",
     "build": "tsc && pebble build",
-    "start": "npx tsc && pebble build && pebble install --emulator emery",
+    "start": "npx tsc && pebble build && pebble install --emulator gabbro",
     "screenshot": "pebble screenshot screenshot.png",
     "wipe": "pebble wipe"
   },
@@ -19,12 +19,7 @@
     "sdkVersion": "3",
     "enableMultiJS": true,
     "targetPlatforms": [
-      "aplite",
-      "basalt",
-      "chalk",
-      "diorite",
       "emery",
-      "flint",
       "gabbro"
     ],
     "watchapp": {

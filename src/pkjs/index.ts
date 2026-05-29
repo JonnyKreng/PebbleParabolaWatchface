@@ -1,72 +1,74 @@
-Pebble.addEventListener("ready", function(_e) {
-  console.log("Weather widget initialized.");
-  fetchWeather();
-  // Update weather every 15 minutes (900,000 milliseconds)
-  setInterval(fetchWeather, 900000);
+Pebble.addEventListener("ready", function (_e) {
+    console.log("Weather widget initialized.");
+    fetchWeather();
+    // Update weather every 15 minutes (900,000 milliseconds)
+    setInterval(fetchWeather, 900000);
 });
 
-Pebble.addEventListener("appmessage", function(_e) {
-  console.log("App message event received");
+Pebble.addEventListener("appmessage", function (_e) {
+    console.log("App message event received");
 });
 
 
 function fetchWeather() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      function(position) {
-        const latitude = position.coords.latitude;
-        const longitude = position.coords.longitude;
-        console.log(`Got location: ${latitude}, ${longitude}`);
-        fetchWeatherForLocation(latitude, longitude);
-      },
-      function(error) {
-        console.error("Error getting geolocation:", error.message);
-        updateWidget("Location unavailable.");
-      }
-    );
-  } else {
-    console.error("Geolocation not supported");
-    updateWidget("Geolocation unavailable.");
-  }
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function (position) {
+                const latitude = position.coords.latitude;
+                const longitude = position.coords.longitude;
+                console.log(`Got location: ${latitude}, ${longitude}`);
+                fetchWeatherForLocation(latitude, longitude);
+            },
+            function (error) {
+                console.error("Error getting geolocation:", error.message);
+                updateWidget("Location unavailable.");
+            }
+        );
+    } else {
+        console.error("Geolocation not supported");
+        updateWidget("Geolocation unavailable.");
+    }
 }
 
 function fetchWeatherForLocation(latitude: number, longitude: number) {
-  const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,relative_humidity_2m,precipitation,precipitation_probability,wind_speed_10m&past_days=0&forecast_days=7`;
+    const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m&hourly=temperature_2m`;
 
-  const xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
 
-  xhr.onload = function() {
-    if (xhr.status === 200) {
-      try {
-        const data = JSON.parse(xhr.responseText);
-        const hourlyData = data.hourly;
+    xhr.onload = function () {
+        if (xhr.status === 200) {
+            try {
+                const data = JSON.parse(xhr.responseText);
+                const current = data.current;
 
-        if (!hourlyData || hourlyData.temperature_2m.length === 0) {
-          console.error("Could not retrieve hourly weather data.");
-          updateWidget("Weather data unavailable.");
-          return;
+                console.log(data);
+
+                if (!current || current.temperature_2m === undefined) {
+                    console.error("Could not retrieve current weather data.");
+                    updateWidget("Weather data unavailable.");
+                    return;
+                }
+
+                const currentTemp = `${Math.round(current.temperature_2m)} °C`;
+                console.log("Current temperature:", currentTemp);
+                updateWidget(currentTemp);
+            } catch (error) {
+                console.error("Error parsing weather data:", error);
+                updateWidget("Weather service error.");
+            }
+        } else {
+            console.error("HTTP error! status:", xhr.status);
+            updateWidget("Weather service error.");
         }
+    };
 
-        const currentTemp = `${Math.round(hourlyData.temperature_2m[0])} °C`;
-        console.log("Current temperature:", currentTemp);
-        updateWidget(currentTemp);
-      } catch (error) {
-        console.error("Error parsing weather data:", error);
+    xhr.onerror = function () {
+        console.error("Error fetching weather data:", xhr.statusText);
         updateWidget("Weather service error.");
-      }
-    } else {
-      console.error("HTTP error! status:", xhr.status);
-      updateWidget("Weather service error.");
-    }
-  };
+    };
 
-  xhr.onerror = function() {
-    console.error("Error fetching weather data:", xhr.statusText);
-    updateWidget("Weather service error.");
-  };
-
-  xhr.open("GET", weatherUrl);
-  xhr.send();
+    xhr.open("GET", weatherUrl);
+    xhr.send();
 }
 
 function updateWidget(message: string) {

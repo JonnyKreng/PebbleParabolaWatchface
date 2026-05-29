@@ -11,6 +11,10 @@
 #define WEATHER_LAYER_HEIGHT 20
 #define WEATHER_LAYER_WIDTH 80
 #define WEATHER_LAYER_MARGIN 5
+
+#ifdef PBL_ROUND
+#define ROUND_MARGIN 45
+#endif
 #define TIME_DATE_H_MARGIN 10
 
 static Window* s_window;
@@ -133,15 +137,27 @@ static void prv_window_load(Window* window)
   parabola_animate_lower_right(s_parabola_lr_layer);
 
   // Battery Layer
+#ifdef PBL_ROUND
+  GRect battery_bounds = GRect(bounds.size.w - BATTERY_WIDTH - ROUND_MARGIN,
+                               BATTERY_MARGIN + ROUND_MARGIN,
+                               BATTERY_WIDTH, BATTERY_HEIGHT);
+#else
   GRect battery_bounds = GRect(bounds.size.w - BATTERY_WIDTH - BATTERY_MARGIN, BATTERY_MARGIN, BATTERY_WIDTH,
                                BATTERY_HEIGHT);
+#endif
   s_battery_layer = layer_create(battery_bounds);
   layer_set_update_proc(s_battery_layer, prv_battery_layer_update_proc);
   layer_add_child(window_layer, s_battery_layer);
 
   // Weather Layer
+#ifdef PBL_ROUND
+  GRect weather_bounds = GRect(ROUND_MARGIN,
+                               bounds.size.h - WEATHER_LAYER_HEIGHT - WEATHER_LAYER_MARGIN - ROUND_MARGIN,
+                               WEATHER_LAYER_WIDTH, WEATHER_LAYER_HEIGHT);
+#else
   GRect weather_bounds = GRect(WEATHER_LAYER_MARGIN, bounds.size.h - WEATHER_LAYER_HEIGHT - WEATHER_LAYER_MARGIN,
                                WEATHER_LAYER_WIDTH, WEATHER_LAYER_HEIGHT);
+#endif
   s_weather_layer = text_layer_create(weather_bounds);
   text_layer_set_font(s_weather_layer, fonts_get_system_font(FONT_KEY_GOTHIC_14_BOLD));
   text_layer_set_text_alignment(s_weather_layer, GTextAlignmentLeft);
