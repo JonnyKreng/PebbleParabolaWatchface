@@ -1,6 +1,5 @@
 build/
 node_modules/
-src/pkjs/**/*.js
 .idea
 .vscode
 CMakeLists.txt
