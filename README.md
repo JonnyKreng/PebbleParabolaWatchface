@@ -1,6 +1,8 @@
 # Parabola
 
-A Pebble watchface with a clean digital clock, date, battery indicator, weather display, and animated parabolic decorative lines.
+A Pebble watchface featuring a clean digital clock, date, battery indicator, weather display, and animated parabolic decorative lines.
+
+![Screenshot](screenshot.png)
 
 ## Features
 
@@ -29,6 +31,6 @@ npm run screenshot  # Capture emulator screenshot
 - `src/c/parabola_draw.[ch]` -- Custom parabola decorative layers with animation
 - `src/pkjs/index.ts` -- Fetches weather via Geolocation + Open-Meteo API
 
-## Author
+## License
 
-MakeAwesomeHappen
+MIT
