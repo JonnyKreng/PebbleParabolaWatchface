@@ -1,0 +1,8 @@
+build/
+node_modules/
+src/pkjs/**/*.js
+
+.DS_Store
+screenshot.png
+.lock-waf_darwin_build
+cmake-build-debug/
