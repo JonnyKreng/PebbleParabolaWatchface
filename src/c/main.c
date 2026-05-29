@@ -12,6 +12,9 @@
 #define WEATHER_LAYER_WIDTH 80
 #define WEATHER_LAYER_MARGIN 5
 
+#define PERSIST_KEY_FG 1
+#define PERSIST_KEY_BG 2
+
 #ifdef PBL_ROUND
 #define ROUND_MARGIN 45
 #endif
@@ -27,6 +30,24 @@ static Layer* s_battery_layer;
 static Layer* s_separator_layer;
 
 static BatteryChargeState s_battery_charge_state;
+static GColor s_fg_color;
+static GColor s_bg_color;
+
+static void prv_apply_colors(void)
+{
+  window_set_background_color(s_window, s_bg_color);
+
+  text_layer_set_text_color(s_time_layer, s_fg_color);
+  text_layer_set_text_color(s_date_layer, s_fg_color);
+  text_layer_set_text_color(s_weather_layer, s_fg_color);
+
+  parabola_set_foreground_color(s_fg_color);
+
+  layer_mark_dirty(s_parabola_ul_layer);
+  layer_mark_dirty(s_parabola_lr_layer);
+  layer_mark_dirty(s_battery_layer);
+  layer_mark_dirty(s_separator_layer);
+}
 
 static void prv_update_time(struct tm* tick_time)
 {
@@ -44,19 +65,19 @@ static void prv_update_time(struct tm* tick_time)
 static void prv_separator_layer_update_proc(Layer* layer, GContext* ctx)
 {
   GRect bounds = layer_get_bounds(layer);
-  graphics_context_set_stroke_color(ctx, GColorWhite);
+  graphics_context_set_stroke_color(ctx, s_fg_color);
   graphics_draw_line(ctx, GPoint(0, bounds.size.h / 2), GPoint(bounds.size.w, bounds.size.h / 2));
 }
 
 static void prv_battery_layer_update_proc(Layer* layer, GContext* ctx)
 {
-  graphics_context_set_stroke_color(ctx, GColorWhite);
-  graphics_context_set_fill_color(ctx, GColorWhite);
+  graphics_context_set_stroke_color(ctx, s_fg_color);
+  graphics_context_set_fill_color(ctx, s_fg_color);
 
   // Battery outline
   GRect bounds = layer_get_bounds(layer);
   graphics_draw_rect(ctx, GRect(0, 0, bounds.size.w - 2, bounds.size.h));
-  graphics_draw_rect(ctx, GRect(bounds.size.w - 2, bounds.size.h / 4, 2, bounds.size.h / 2)); // Nipple
+  graphics_draw_rect(ctx, GRect(bounds.size.w - 2, bounds.size.h / 4, 2, bounds.size.h / 2));
 
   // Battery fill
   int width = (int)((float)s_battery_charge_state.charge_percent / 100.0F * (bounds.size.w - 6));
@@ -82,10 +103,35 @@ static void prv_tick_handler(struct tm* tick_time, TimeUnits units_changed)
 
 static void prv_message_handler(DictionaryIterator* received, void* context)
 {
+  bool colors_changed = false;
+
   Tuple* temperature_tuple = dict_find(received, MESSAGE_KEY_weather_temperature);
   if (temperature_tuple)
   {
     text_layer_set_text(s_weather_layer, temperature_tuple->value->cstring);
+  }
+
+  Tuple* fg_tuple = dict_find(received, MESSAGE_KEY_foreground_color);
+  if (fg_tuple)
+  {
+    uint32_t color_hex = fg_tuple->value->uint32;
+    s_fg_color = GColorFromHEX(color_hex);
+    persist_write_int(PERSIST_KEY_FG, color_hex);
+    colors_changed = true;
+  }
+
+  Tuple* bg_tuple = dict_find(received, MESSAGE_KEY_background_color);
+  if (bg_tuple)
+  {
+    uint32_t color_hex = bg_tuple->value->uint32;
+    s_bg_color = GColorFromHEX(color_hex);
+    persist_write_int(PERSIST_KEY_BG, color_hex);
+    colors_changed = true;
+  }
+
+  if (colors_changed)
+  {
+    prv_apply_colors();
   }
 }
 
@@ -105,7 +151,6 @@ static void prv_window_load(Window* window)
   text_layer_set_font(s_time_layer, fonts_get_system_font(FONT_KEY_ROBOTO_BOLD_SUBSET_49));
   text_layer_set_text_alignment(s_time_layer, GTextAlignmentCenter);
   text_layer_set_background_color(s_time_layer, GColorClear);
-  text_layer_set_text_color(s_time_layer, GColorWhite);
   layer_add_child(window_layer, text_layer_get_layer(s_time_layer));
 
   // Date Layer
@@ -114,7 +159,6 @@ static void prv_window_load(Window* window)
   text_layer_set_font(s_date_layer, fonts_get_system_font(FONT_KEY_ROBOTO_CONDENSED_21));
   text_layer_set_text_alignment(s_date_layer, GTextAlignmentCenter);
   text_layer_set_background_color(s_date_layer, GColorClear);
-  text_layer_set_text_color(s_date_layer, GColorWhite);
   layer_add_child(window_layer, text_layer_get_layer(s_date_layer));
 
   // Separator Line under time
@@ -162,11 +206,15 @@ static void prv_window_load(Window* window)
   text_layer_set_font(s_weather_layer, fonts_get_system_font(FONT_KEY_GOTHIC_14_BOLD));
   text_layer_set_text_alignment(s_weather_layer, GTextAlignmentLeft);
   text_layer_set_background_color(s_weather_layer, GColorClear);
-  text_layer_set_text_color(s_weather_layer, GColorWhite);
   text_layer_set_text(s_weather_layer, "--°");
   layer_add_child(window_layer, text_layer_get_layer(s_weather_layer));
 
-  // Initial updates
+  // Read persisted colors
+  s_fg_color = GColorFromHEX(persist_exists(PERSIST_KEY_FG) ? persist_read_int(PERSIST_KEY_FG) : 0xFFFFFF);
+  s_bg_color = GColorFromHEX(persist_exists(PERSIST_KEY_BG) ? persist_read_int(PERSIST_KEY_BG) : 0x000000);
+
+  prv_apply_colors();
+
   const time_t now = time(NULL);
   struct tm* t = localtime(&now);
   prv_update_time(t);

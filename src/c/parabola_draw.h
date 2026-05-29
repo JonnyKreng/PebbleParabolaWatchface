@@ -10,3 +10,5 @@ void parabola_layer_destroy_lower_right(Layer* layer);
 
 void parabola_animate_upper_left(Layer* layer);
 void parabola_animate_lower_right(Layer* layer);
+
+void parabola_set_foreground_color(GColor color);

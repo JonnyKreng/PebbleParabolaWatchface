@@ -29,7 +29,9 @@
     "messageKeys": [
       "weather_temperature",
       "weather_humidity",
-      "weather_wind_speed"
+      "weather_wind_speed",
+      "foreground_color",
+      "background_color"
     ],
     "resources": {
       "media": []

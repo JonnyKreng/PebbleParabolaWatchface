@@ -13,10 +13,16 @@ typedef struct
 
 static ParabolaAnimationState s_ul_state;
 static ParabolaAnimationState s_lr_state;
+static GColor s_foreground_color;
+
+void parabola_set_foreground_color(GColor color)
+{
+  s_foreground_color = color;
+}
 
 static void prv_parabola_layer_update_proc_upper_left(Layer* layer, GContext* ctx)
 {
-  graphics_context_set_stroke_color(ctx, GColorOrange);
+  graphics_context_set_stroke_color(ctx, s_foreground_color);
   graphics_context_set_compositing_mode(ctx, GCompOpAssign);
   graphics_context_set_stroke_width(ctx, PARABOLA_LINE_WIDTH);
 
@@ -37,7 +43,7 @@ static void prv_parabola_layer_update_proc_upper_left(Layer* layer, GContext* ct
 
 static void prv_parabola_layer_update_proc_lower_right(Layer* layer, GContext* ctx)
 {
-  graphics_context_set_stroke_color(ctx, GColorOrange);
+  graphics_context_set_stroke_color(ctx, s_foreground_color);
   graphics_context_set_compositing_mode(ctx, GCompOpAssign);
   graphics_context_set_stroke_width(ctx, PARABOLA_LINE_WIDTH);
 
