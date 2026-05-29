@@ -16,7 +16,7 @@ decorative lines.
 
 ## Platforms
 
-Supports emery and gabbro.
+Supports emery (Time 2) and gabbro (Round 2).
 
 ## Build
 
