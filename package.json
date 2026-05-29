@@ -11,6 +11,7 @@
     "build": "tsc && pebble build",
     "start": "npx tsc && pebble build && pebble install --emulator emery",
     "screenshot": "pebble screenshot screenshot.png",
+    "push": "npx tsc && pebble build && pebble install --phone",
     "wipe": "pebble wipe"
   },
   "pebble": {
