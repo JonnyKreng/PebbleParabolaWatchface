@@ -1,37 +1,48 @@
 {
-    "author": "Company",
-    "dependencies": {},
-    "keywords": [
-        "pebble-app"
+  "name": "Parabola",
+  "author": "Jonny",
+  "version": "1.0.6",
+  "keywords": [
+    "pebble-app"
+  ],
+  "private": true,
+  "scripts": {
+    "tsc": "tsc",
+    "build": "tsc && pebble build",
+    "start": "npx tsc && pebble build && pebble install --emulator emery",
+    "screenshot": "pebble screenshot screenshot.png",
+    "push": "npx tsc && pebble build && pebble install --phone",
+    "wipe": "pebble wipe"
+  },
+  "pebble": {
+    "displayName": "Parabola",
+    "uuid": "270688eb-68d3-4539-bbde-aa5cd6c108ec",
+    "sdkVersion": "3",
+    "enableMultiJS": true,
+    "targetPlatforms": [
+      "emery",
+      "gabbro"
     ],
-    "name": "parabola",
-    "pebble": {
-        "capabilities": [
-            "location",
-            "configurable"
-        ],
-        "displayName": "Parabola",
-        "enableMultiJS": true,
-        "messageKeys": [
-            "weather_temperature",
-            "weather_humidity",
-            "weather_wind_speed",
-            "foreground_color",
-            "background_color"
-        ],
-        "projectType": "native",
-        "resources": {
-            "media": []
-        },
-        "sdkVersion": "3",
-        "targetPlatforms": [
-            "emery",
-            "gabbro"
-        ],
-        "uuid": "270688eb-68d3-4539-bbde-aa5cd6c108ec",
-        "watchapp": {
-            "watchface": true
-        }
+    "watchapp": {
+      "watchface": true
     },
-    "version": "1.0.5"
+    "messageKeys": [
+      "weather_temperature",
+      "weather_humidity",
+      "weather_wind_speed",
+      "foreground_color",
+      "background_color"
+    ],
+    "resources": {
+      "media": []
+    },
+    "capabilities": [
+      "location",
+      "configurable"
+    ]
+  },
+  "devDependencies": {
+    "@types/pebblekitjs": "^4.0.33",
+    "typescript": "^6.0.3"
+  }
 }
