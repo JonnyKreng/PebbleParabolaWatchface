@@ -1,7 +1,7 @@
 {
   "name": "Parabola",
   "author": "MakeAwesomeHappen",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "keywords": [
     "pebble-app"
   ],
@@ -9,7 +9,7 @@
   "scripts": {
     "tsc": "tsc",
     "build": "tsc && pebble build",
-    "start": "npx tsc && pebble build && pebble install --emulator gabbro",
+    "start": "npx tsc && pebble build && pebble install --emulator emery",
     "screenshot": "pebble screenshot screenshot.png",
     "wipe": "pebble wipe"
   },

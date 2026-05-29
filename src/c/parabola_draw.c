@@ -16,7 +16,7 @@ static ParabolaAnimationState s_lr_state;
 
 static void prv_parabola_layer_update_proc_upper_left(Layer* layer, GContext* ctx)
 {
-  graphics_context_set_stroke_color(ctx, GColorRed);
+  graphics_context_set_stroke_color(ctx, GColorOrange);
   graphics_context_set_stroke_width(ctx, PARABOLA_LINE_WIDTH);
 
   GRect bounds = layer_get_bounds(layer);
@@ -36,7 +36,7 @@ static void prv_parabola_layer_update_proc_upper_left(Layer* layer, GContext* ct
 
 static void prv_parabola_layer_update_proc_lower_right(Layer* layer, GContext* ctx)
 {
-  graphics_context_set_stroke_color(ctx, GColorRed);
+  graphics_context_set_stroke_color(ctx, GColorOrange);
   graphics_context_set_stroke_width(ctx, PARABOLA_LINE_WIDTH);
 
   GRect bounds = layer_get_bounds(layer);
