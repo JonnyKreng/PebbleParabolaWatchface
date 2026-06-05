@@ -21,7 +21,8 @@
     "enableMultiJS": true,
     "targetPlatforms": [
       "emery",
-      "gabbro"
+      "gabbro",
+      "flint"
     ],
     "watchapp": {
       "watchface": true
@@ -42,7 +43,6 @@
     ]
   },
   "devDependencies": {
-    "@types/pebblekitjs": "^4.0.33",
-    "typescript": "^6.0.3"
+    "@types/pebblekitjs": "^4.0.33"
   }
 }
